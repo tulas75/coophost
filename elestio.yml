@@ -16,7 +16,7 @@ environments:
     value: "https://[CI_CD_DOMAIN]"
 config:
   runTime: "dockerCompose"
-  version: "2.33-0.21.3-0.40"
+  version: "graphql 2.33- auth 0.21.3- storage 0.40"
   framework: ""
   buildCommand: "docker-compose build"
   buildDir: "/"
