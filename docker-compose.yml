@@ -44,7 +44,7 @@ services:
       - "${YOUR_DOCKER_IP}:${YOUR_AUTH_PORT}:${AUTH_PORT}"
     volumes:
       - ${AUTH_EMAIL_TEMPLATE}:/app/email-templates
-
+    restart: always
   storage:
     image: nhost/hasura-storage:${HASURA_STORAGE_VERSION}
     depends_on:
