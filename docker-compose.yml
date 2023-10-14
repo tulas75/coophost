@@ -77,13 +77,13 @@ services:
       - NHOST_GRAPHQL_URL=https://${HASURA_URL}/v1/graphql
       - NHOST_HASURA_URL=https://${HASURA_URL}/console
       - NHOST_JWT_SECRET=${HASURA_GRAPHQL_JWT_SECRET}
-      - NHOST_REGION="MILANO"
+      - NHOST_REGION=${NHOST_REGION}
       - NHOST_STORAGE_URL=https://${STORAGE_URL}/
-      - NHOST_SUBDOMAIN="coophost.run"
+      - NHOST_SUBDOMAIN=${NHOST_SUBDOMAIN}
       - NHOST_WEBHOOK_SECRET=${ADMIN_PASSWORD}
     restart: always
     ports:
-      - "172.17.0.1:3001:3000"
+      - "${YOUR_DOCKER_IP}:${YOUR_FUNCTIONS_PORT}:${FUNCTIONS_PORT}"
     volumes:
         - type: bind
           source: .
