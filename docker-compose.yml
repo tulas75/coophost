@@ -65,3 +65,35 @@ services:
       - PUBLIC_URL=https://${STORAGE_URL}
     command:
       - serve
+  functions:
+    image: nhost/functions:1.0.0
+    environment:
+      - HASURA_GRAPHQL_ADMIN_SECRET=${ADMIN_PASSWORD}
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://${PG_USER}:${PG_PASSWORD}@${PG_ADDRESS}:${PG_PORT}/${DB_NAME}
+      - HASURA_GRAPHQL_GRAPHQL_URL=https://${HASURA_URL}/v1/graphql
+      - HASURA_GRAPHQL_JWT_SECRET=${HASURA_GRAPHQL_JWT_SECRET}
+      - NHOST_ADMIN_SECRET:${ADMIN_PASSWORD}
+      - NHOST_AUTH_URL=https://${AUTH_URL}/v1
+      - NHOST_GRAPHQL_URL=https://${HASURA_URL}/v1/graphql
+      - NHOST_HASURA_URL=https://${HASURA_URL}/console
+      - NHOST_JWT_SECRET=${HASURA_GRAPHQL_JWT_SECRET}
+      - NHOST_REGION="MILANO"
+      - NHOST_STORAGE_URL=https://${STORAGE_URL}/
+      - NHOST_SUBDOMAIN="coophost.run"
+      - NHOST_WEBHOOK_SECRET=${ADMIN_PASSWORD}
+    restart: always
+    ports:
+      - "172.17.0.1:3001:3000"
+    volumes:
+        - type: bind
+          source: .
+          target: /opt/project
+        - type: volume
+          source: root_node_modules
+          target: /opt/project/node_modules
+        - type: volume
+          source: functions_node_modules
+          target: /opt/project/functions/node_modules
+volumes:
+    functions_node_modules: {}
+    root_node_modules: {}
