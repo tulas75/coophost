@@ -1,7 +1,7 @@
 version: "3"
 services:
   graphql-engine:
-    image: nhost/graphql-engine:${HASURA_VERSION}
+    image: nhost/graphql-engine:v2.33.4-ce.cli-migrations-v3
     restart: always
     ports:
       - "${YOUR_DOCKER_IP}:${YOUR_HASURA_PORT}:${HASURA_GRAPHQL_SERVER_PORT}"
@@ -14,9 +14,8 @@ services:
     volumes:
       - ${HASURA_METADATA}:/hasura-metadata
       - ${HASURA_MIGRATIONS}:/hasura-migrations
-
   hasura-auth:
-    image: nhost/hasura-auth:${HASURA_AUTH_VERSION}
+    image: nhost/hasura-auth:0.21.3
     depends_on:
       - "graphql-engine"
     environment:
@@ -46,7 +45,7 @@ services:
       - ${AUTH_EMAIL_TEMPLATE}:/app/email-templates
     restart: always
   storage:
-    image: nhost/hasura-storage:${HASURA_STORAGE_VERSION}
+    image: nhost/hasura-storage:0.4.0
     depends_on:
       - graphql-engine
     restart: always
