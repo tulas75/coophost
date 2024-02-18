@@ -40,11 +40,32 @@ services:
       - AUTH_LOCALE_ALLOWED_LOCALES=${AUTH_LOCALE_ALLOWED_LOCALES}
       - AUTH_LOCALE_DEFAULT=${AUTH_LOCALE_DEFAULT}
       - AUTH_EMAIL_SIGNIN_EMAIL_VERIFIED_REQUIRED=${AUTH_EMAIL_SIGNIN_EMAIL_VERIFIED_REQUIRED}
+      - AUTH_PROVIDER_AZUREAD_ENABLED=${AUTH_PROVIDER_AZUREAD_ENABLED}
+      - AUTH_PROVIDER_AZUREAD_CLIENT_ID=${AUTH_PROVIDER_AZUREAD_CLIENT_ID}
+      - AUTH_PROVIDER_AZUREAD_CLIENT_SECRET=${AUTH_PROVIDER_AZUREAD_CLIENT_SECRET}
+      - AUTH_PROVIDER_AZUREAD_TENANT=${AUTH_PROVIDER_AZUREAD_TENANT}
+      - AUTH_PROVIDER_GOOGLE_ENABLED=${AUTH_PROVIDER_GOOGLE_ENABLED}
+      - AUTH_PROVIDER_GOOGLE_CLIENT_ID=${AUTH_PROVIDER_GOOGLE_CLIENT_ID}
+      - AUTH_PROVIDER_GOOGLE_CLIENT_SECRET=${AUTH_PROVIDER_GOOGLE_CLIENT_SECRET}
     ports:
       - "${YOUR_DOCKER_IP}:${YOUR_AUTH_PORT}:${AUTH_PORT}"
     volumes:
       - ${AUTH_EMAIL_TEMPLATE}:/app/email-templates
     restart: always
+  functions:
+    image: nhost/functions:1.0.0
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://${PG_USER}:${PG_PASSWORD}@${PG_ADDRESS}:${PG_PORT}/${DB_NAME}
+      - HASURA_GRAPHQL_GRAPHQL_URL=https://${HASURA_URL}/v1/graphql
+      - HASURA_GRAPHQL_JWT_SECRET=${HASURA_GRAPHQL_JWT_SECRET}
+      - HASURA_GRAPHQL_ADMIN_SECRET=${ADMIN_PASSWORD}
+    restart: always
+    ports:
+      - "${YOUR_DOCKER_IP}:${YOUR_FUNC_PORT}:${FUNC_PORT}"
+    volumes:
+      -  .:/opt/project
+      - project_node_modules:/opt/project/node_modules
+      - functions_node_modules:/opt/project/functions/node_modules
   storage:
     image: nhost/hasura-storage:${HASURA_STORAGE_VERSION}
     depends_on:
@@ -66,3 +87,6 @@ services:
       - PUBLIC_URL=https://${STORAGE_URL}
     command:
       - serve
+volumes:
+  project_node_modules:
+  functions_node_modules:
