@@ -100,6 +100,7 @@ services:
       - MCP_REDACT_FIELDS=${MCP_REDACT_FIELDS}
       - MCP_LOG_LEVEL=${MCP_LOG_LEVEL}
       - MCP_TRUST_PROXY=${MCP_TRUST_PROXY}
+      - MCP_OAUTH_EXTRA_REDIRECT_URIS=${MCP_OAUTH_EXTRA_REDIRECT_URIS}
     healthcheck:
       test: ["CMD-SHELL", "curl -sf http://localhost:${MCP_PORT}/healthz || exit 1"]
       interval: 10s
